@@ -32,9 +32,12 @@ def global_version():
     return jsonify(configs.version)
 
 
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def log_root():
-    app.logger.info("req %s with %s and headers %s", request.path, request.json, dict(request.headers))
+    if request.method == 'POST':
+        app.logger.info("req %s with %s and headers %s", request.path, request.json, dict(request.headers))
+    else:
+        app.logger.info("req %s with %s and headers %s", request.path, request.args, dict(request.headers))
     return jsonify({"status": "ok"})
 
 
