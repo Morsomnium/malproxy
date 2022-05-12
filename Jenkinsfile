@@ -3,13 +3,14 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'echo "building the repo"'
+                echo "building the repo"
+                sh "pip install -r requirements.txt"
             }
         }
 
         stage('Test') {
             steps {
-                sh 'echo "I would have tested the app, if you were a better person..."'
+                echo "I would have tested the app, if you were a better person..."
                 input(id: "Deploy Gate", message: "Deploy ${params.project_name}?", ok: 'Deploy')
             }
         }
