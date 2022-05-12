@@ -18,7 +18,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "deploying the application"
-                sh "nohup python3 app.py > log.txt 2>&1 &"
+                sh "screen -S mal_proxy_screen 'python3 app.py &'"
                 sh "curl --silent --show-error --fail http://127.0.0.1:8181/ping"
             }
         }
