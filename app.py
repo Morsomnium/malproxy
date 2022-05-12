@@ -1,4 +1,3 @@
-# import logging
 import json
 
 from flask import Flask, jsonify, request
@@ -35,7 +34,7 @@ def global_version():
 
 @app.route("/")
 def log_root():
-    app.logger.info("req %s with %s and headers %s", request.path, request.json, request.headers)
+    app.logger.info("req %s with %s and headers %s", request.path, request.json, dict(request.headers))
     return jsonify({"status": "ok"})
 
 
@@ -81,4 +80,8 @@ def create_user():
 
 
 if __name__ == '__main__':
+    import logging
+    logging.basicConfig(filename=configs.logging.path,
+                        level=configs.logging.level,
+                        format=configs.logging.log_format)
     app.run(debug=configs.debug_mode)
