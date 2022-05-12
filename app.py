@@ -84,4 +84,4 @@ if __name__ == '__main__':
     logging.basicConfig(filename=configs.logging.path,
                         level=configs.logging.level,
                         format=configs.logging.log_format)
-    app.run(debug=configs.debug_mode)
+    app.run(debug=configs.debug_mode, port=configs.port)
