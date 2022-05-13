@@ -46,6 +46,7 @@ def log_root():
 
 @app.route(paths.plex_handler, methods=['POST'])
 def plex_handler():
+    app.logger.info("Plex handler endpoint called.")
     plex_data = request.form
     plex_event = plex_data[configs.plexdictionary.event]
     if plex_event == configs.plexdictionary.play:
@@ -106,4 +107,4 @@ if __name__ == '__main__':
 else:
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
-    app.logger.setLevel(gunicorn_logger.level)
+    app.logger.setLevel(configs.logging.level)
