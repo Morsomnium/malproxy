@@ -17,9 +17,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "deploying the application"
-                sh "JENKINS_NODE_COOKIE=dontKillMe python3 app.py &"
+                sh "sudo /bin/systemctl restart gunicorn_malproxy.service"
                 echo "Waiting 5 secs to let app finish booting..."
-                sh "sleep 5s"
+                sh "sleep 3s"
                 sh "curl --silent --show-error --fail http://127.0.0.1:8181/ping"
             }
         }

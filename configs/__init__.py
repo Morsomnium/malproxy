@@ -1,7 +1,7 @@
 from multiprocessing import cpu_count
 import configs.logging
 
-version = '0.0.11'
+version = '0.0.12'
 app_name = 'malproxy'
 debug_mode = False
 port = 8181
