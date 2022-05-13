@@ -10,9 +10,6 @@ import configs.paths as paths
 
 app = Flask(configs.app_name)
 auth = HTTPBasicAuth()
-logging.basicConfig(filename=configs.logging.path,
-                    level=configs.logging.level,
-                    format=configs.logging.log_format)
 
 
 @auth.verify_password
@@ -102,6 +99,9 @@ def create_user():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(filename=configs.logging.path,
+                        level=configs.logging.level,
+                        format=configs.logging.log_format)
     app.run(debug=configs.debug_mode, port=configs.port)
 else:
     gunicorn_logger = logging.getLogger('gunicorn.error')
