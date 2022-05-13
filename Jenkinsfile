@@ -11,6 +11,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "I would have tested the app, if you were a better person..."
+                sh 'py.test --junit-xml test-reports/results.xml tests/test_deploy.py'
                 input(id: "Deploy Gate", message: "Deploy ${params.project_name}?", ok: 'Deploy')
             }
         }
