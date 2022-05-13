@@ -48,7 +48,9 @@ def log_root():
 def plex_handler():
     app.logger.info("Plex handler endpoint called.")
     plex_data = json.loads(request.form['payload'])
+    app.logger.debug("Plex payload is %s", plex_data)
     plex_event = plex_data[configs.plexdictionary.event]
+    app.logger.debug("Plex event is %s", plex_event)
     if plex_event == configs.plexdictionary.play:
         app.logger.info("A playback has just started!")
     elif plex_event == configs.plexdictionary.scrobble:
