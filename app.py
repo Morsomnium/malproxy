@@ -35,7 +35,7 @@ def global_version():
 @app.route("/log", methods=['GET', 'POST'])
 def log_root():
     if request.method == 'POST':
-        app.logger.info("req %s with %s and headers %s", request.path, request.json, dict(request.headers))
+        app.logger.info("req %s with %s and headers %s", request.path, dict(request.form), dict(request.headers))
     else:
         app.logger.info("req %s with %s and headers %s", request.path, request.args, dict(request.headers))
     return jsonify({"status": "ok"})
