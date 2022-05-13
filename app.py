@@ -1,7 +1,7 @@
 import json
 import logging
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_httpauth import HTTPBasicAuth
 
@@ -28,21 +28,36 @@ def verify_password(username, password):
 
 @app.route(paths.global_ping)
 def global_ping():
+    app.logger.info("Ping endpoint was called.")
     return jsonify("pong!")
 
 
 @app.route(paths.global_version)
 def global_version():
+    app.logger.info("Version endpoint was called.")
     return jsonify(configs.version)
 
 
-@app.route("/log", methods=['GET', 'POST'])
+@app.route(paths.global_log, methods=['GET', 'POST'])
 def log_root():
     if request.method == 'POST':
         app.logger.info("req %s with %s and headers %s", request.path, str(request.form), dict(request.headers))
     else:
         app.logger.info("req %s with %s and headers %s", request.path, request.args, dict(request.headers))
     return jsonify({"status": "ok"})
+
+
+@app.route(paths.plex_handler, methods=['POST'])
+def plex_handler():
+    plex_data = json.loads(request.form)
+    plex_event = plex_data[configs.plexdictionary.event]
+    if plex_event == configs.plexdictionary.play:
+        app.logger.info("A playback has just started!")
+    elif plex_event == configs.plexdictionary.scrobble:
+        app.logger.info("User has watched the media past 90%.")
+    else:
+        app.logger.error("Unknown event received! App does not how to handle it yet.")
+        abort(501, description="Unknown event received! App does not how to handle it yet.")
 
 
 @app.route(paths.episode_finished)
@@ -88,3 +103,7 @@ def create_user():
 
 if __name__ == '__main__':
     app.run(debug=configs.debug_mode, port=configs.port)
+else:
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
