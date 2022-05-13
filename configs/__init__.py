@@ -2,7 +2,7 @@ from multiprocessing import cpu_count
 import configs.logging
 import configs.plexdictionary
 
-version = '0.0.13'
+version = '0.0.14'
 app_name = 'malproxy'
 debug_mode = False
 port = 8181

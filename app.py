@@ -46,7 +46,7 @@ def log_root():
 
 @app.route(paths.plex_handler, methods=['POST'])
 def plex_handler():
-    plex_data = json.loads(request.form)
+    plex_data = request.form
     plex_event = plex_data[configs.plexdictionary.event]
     if plex_event == configs.plexdictionary.play:
         app.logger.info("A playback has just started!")
