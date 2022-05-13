@@ -1,3 +1,6 @@
+# Plex anime library name
+anime_folder = 'Anime'
+
 # Plex events
 event = 'event'
 

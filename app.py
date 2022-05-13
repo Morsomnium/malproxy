@@ -49,10 +49,19 @@ def plex_handler():
     app.logger.info("Plex handler endpoint called.")
     plex_data = json.loads(request.form['payload'])
     app.logger.debug("Plex payload is %s", plex_data)
+
+    if plex_data['Metadata']['librarySectionTitle'] != configs.plexdictionary.anime_folder:
+        return jsonify({"status": "ok"})
+
     plex_event = plex_data[configs.plexdictionary.event]
     app.logger.debug("Plex event is %s", plex_event)
+
     if plex_event == configs.plexdictionary.play:
         app.logger.info("A playback has just started!")
+    elif plex_event == configs.plexdictionary.pause:
+        app.logger.info("User has paused the media.")
+    elif plex_event == configs.plexdictionary.resume:
+        app.logger.info("User has resumed the media.")
     elif plex_event == configs.plexdictionary.scrobble:
         app.logger.info("User has watched the media past 90%.")
     else:
