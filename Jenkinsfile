@@ -11,7 +11,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo "I would have tested the app, if you were a better person..."
-                sh 'python -m py.test --junit-xml test-reports/results.xml tests/test_deploy.py'
             }
         }
 
@@ -22,6 +21,12 @@ pipeline {
                 echo "Waiting 5 secs to let app finish booting..."
                 sh "sleep 5s"
                 sh "curl --silent --show-error --fail http://127.0.0.1:8181/ping"
+            }
+        }
+
+        stage('Post-Deploy Test') {
+            steps {
+                sh 'python -m py.test --junit-xml test-reports/deploy_results.xml tests/test_deploy.py'
             }
         }
     }
