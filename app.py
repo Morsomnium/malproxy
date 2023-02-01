@@ -65,7 +65,7 @@ def plex_handler():
     elif plex_event == configs.plexdictionary.scrobble:
         app.logger.info("User has watched the media past 90%.")
     else:
-        app.logger.error("Unknown event received! App does not how to handle it yet.")
+        app.logger.error("Unknown event received (%s)! App does not how to handle it yet.", plex_event)
         abort(501, description="Unknown event received! App does not how to handle it yet.")
 
 
