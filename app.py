@@ -102,9 +102,9 @@ def create_user():
         with open('configs/users.json', mode='w') as users_file:
             json.dump(users, users_file, indent=2)
     except Exception as e:
-        app.logger.info("Failed to create a new user!")
+        app.logger.error("Failed to create a new user!")
         app.logger.exception(e)
-        return jsonify({"status": "error", "details": "No..."})
+        return jsonify({"status": "error", "details": str(e)})
 
     app.logger.info("User '%s' created successfully.", username)
     return jsonify({"status": "ok", "username": request.json.get('username')})
