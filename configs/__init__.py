@@ -4,7 +4,7 @@ import configs.plexdictionary
 
 users_db = 'configs/users.json'
 
-version = '0.0.18'
+version = '0.0.19'
 app_name = 'malproxy'
 debug_mode = False
 port = 8181
