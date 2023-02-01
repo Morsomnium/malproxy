@@ -8,6 +8,7 @@ plex_handler = '/plex'
 
 # MAL paths (i.e which paths to call on MAL API side)
 episode_finished = '/mal/finished'
+get_list = 'mal/list'
 
 # Admin paths
 create_user = '/admin/user/create'

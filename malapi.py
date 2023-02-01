@@ -17,8 +17,8 @@ class MalAPI:
         'anime_start_date'
     ]
 
-    def __init__(self, token):
-        self.user = '@me'
+    def __init__(self, username, token):
+        self.user = username
         self.token = token
 
     def get_anime_list(self, status=anime_statuses[0], sort=sorting_options[0], limit=100, offset=0):

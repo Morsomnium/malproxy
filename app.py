@@ -7,6 +7,7 @@ from flask_httpauth import HTTPBasicAuth
 
 import configs
 import configs.paths as paths
+import malapi
 
 app = Flask(configs.app_name)
 auth = HTTPBasicAuth()
@@ -72,7 +73,43 @@ def plex_handler():
 @app.route(paths.episode_finished)
 @auth.login_required
 def episode_finished():
+    app.logger.info("req %s with %s", request.path, request.json)
+    # Init the MalAPI object
+    # Check that the title is present in the list
+    # TODO: some logic with title status?
+    # update the title
     return jsonify({"status": "ok"})
+
+
+@app.route(paths.get_list)
+@auth.login_required
+def get_anime_list():
+    app.logger.info("req %s with %s", request.path, request.json)
+    user = request.args.get('user')
+
+    # load users file and fetch the necessary data from there
+    app.logger.debug("Loading users file...")
+    with open(configs.users_db, mode='r') as users_file:
+        users = json.load(users_file)
+
+    app.logger.debug("Checking %s's presence in users file and fetching username and token...", user)
+    if user in users:
+        mal_token = users[user]['mal_password']
+        mal_username = users[user]['mal_username']
+
+    # Init the MalAPI object
+    app.logger.debug("Initializing MalAPI object...")
+    mal_api = malapi.MalAPI(mal_username, mal_token)
+
+    # get all animes in "watching" list
+    app.logger.debug("Fetching 'Watching' list for %s...", mal_username)
+    watching_list = mal_api.get_anime_list()
+    app.logger.info("'Watching' list for %s: %s", mal_username, watching_list)
+
+    # Check that the title is present in the list
+    # TODO: some logic with title status?
+    # update the title
+    return jsonify(watching_list)
 
 
 @app.route(paths.create_user, methods=['POST'])
@@ -96,10 +133,10 @@ def create_user():
         default_user_params['mal_password'] = request.json.get('mal_password')
         new_user_params = {username: default_user_params}
 
-        with open('configs/users.json', mode='r') as users_file:
+        with open(configs.users_db, mode='r') as users_file:
             users = json.load(users_file)
         users.update(new_user_params)
-        with open('configs/users.json', mode='w') as users_file:
+        with open(configs.users_db, mode='w') as users_file:
             json.dump(users, users_file, indent=2)
     except Exception as e:
         app.logger.error("Failed to create a new user!")
